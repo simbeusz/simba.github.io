@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Płatność</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #6b1313;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color:rgb(68, 34, 34);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1, h2 {
+            color: #e4dada;
+        }
+        .cart-items {
+            margin-top: 30px;
+            text-align: left;
+        }
+        .cart-items p {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+        .payment-button {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            display: block;
+            margin: 30px auto 0 auto;
+            transition: background-color 0.3s;
+        }
+        .payment-button:hover {
+            background-color: #218838;
+        }
+        .back-button {
+            text-decoration: none;
+            color: #fff;
+            background-color: #007BFF;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+        .confirmation {
+            display: none;
+            margin-top: 30px;
+            font-size: 20px;
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Płatność</h1>
+
+        <div class="cart-items" id="cart-items">
+            <p>Koszyk jest pusty.</p>
+        </div>
+
+        <button class="payment-button" id="payment-button">Zapłać Teraz</button>
+        <a href="index.html" class="back-button">Wróć do Sklepu</a>
+
+        <div class="confirmation" id="confirmation">
+            <p>Twoje zamówienie zostało pomyślnie zrealizowane! Dziękujemy za zakupy.</p>
+        </div>
+    </div>
+
+    <script>
+        // Pobieranie danych koszyka z localStorage
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+        const cartItemsDiv = document.getElementById('cart-items');
+        if (cartItems.length > 0) {
+            let cartHTML = '<h2>Podsumowanie Zamówienia</h2>';
+            let totalAmount = 0;
+            cartItems.forEach(item => {
+                cartHTML += `<p><strong>${item.product}</strong>: ${item.quantity} </p>`;
+                cartHTML += `<p>Łączna cena: ${item.totalPrice} PLN</p><hr>`;
+                totalAmount += parseFloat(item.totalPrice);
+            });
+            cartHTML += `<p><strong>Suma do zapłaty: ${totalAmount.toFixed(2)} PLN</strong></p>`;
+
+            cartItemsDiv.innerHTML = cartHTML;
+        } else {
+            cartItemsDiv.innerHTML = '<p>Koszyk jest pusty.</p>';
+            document.getElementById('payment-button').style.display = 'none';
+        }
+
+        // Obsługa przycisku "Zapłać Teraz"
+        document.getElementById('payment-button').addEventListener('click', function() {
+            if (cartItems.length === 0) {
+                alert('Koszyk jest pusty.');
+                return;
+            }
+
+            // Symulacja procesu płatności
+            // W rzeczywistej aplikacji tutaj dodasz integrację z systemem płatności
+
+            // Wyświetlenie potwierdzenia
+            document.getElementById('confirmation').style.display = 'block';
+
+            // Wyczyszczenie koszyka
+            localStorage.removeItem('cartItems');
+
+            // Ukrycie przycisku płatności i koszyka
+            document.getElementById('payment-button').style.display = 'none';
+            cartItemsDiv.innerHTML = '<p>Koszyk jest pusty.</p>';
+        });
+    </script>
+
+</body>
+</html>

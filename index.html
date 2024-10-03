@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReKey</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #6b1313;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgb(68, 34, 34);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: rgb(34, 7, 7);
+            color: rgb(32, 27, 27);
+            padding: 10px;
+            text-align: center;
+        }
+        .footer {
+            background-color: rgb(34, 7, 7);
+            color: rgb(32, 27, 27);
+            padding: 10px;
+            text-align: center;
+        }
+        h1 {
+            text-align: center;
+            color: #ffffff;
+        }
+        .product {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #070707;
+            border-radius: 8px;
+            background-color: #463737;
+        }
+        .product img {
+            width: 150px;
+            height: auto;
+            margin-right: 20px;
+        }
+        .product-info {
+            flex: 1;
+        }
+        .product-info h2 {
+            margin: 0 0 10px 0;
+            color: #555;
+        }
+        .quantity-input {
+            margin: 10px 0;
+        }
+        .quantity-input input {
+            padding: 5px;
+            font-size: 16px;
+            width: 80px;
+            text-align: center;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .cart {
+            margin-top: 40px;
+            background-color: #f1f1f1;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .cart a {
+            text-decoration: none;
+            color: #fff;
+            background-color: #007BFF;
+            padding: 10px 25px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+        .cart a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>ReKey</h1>
+        
+        <header>
+          <center>  <img src="ReKey.jpg" alt="Logo strony" class="center"> </center>
+            <h1>Witamy w naszym sklepie online!</h1>
+        </header>
+
+        
+
+
+        
+        <!-- Pierwszy rodzaj ziemniaków -->
+        <div class="product">
+            <img src="rk61.jpg" alt="RK61 Keyboard">
+            <div class="product-info">
+                <h2>RK61</h2>
+                <p>Cena: 200 </p>
+                <div class="quantity-input">
+                    <label for="quantity1">Ilość</label>
+                    <input type="number" id="quantity1" min="1" value="1">
+                </div>
+                <button class="button" id="add-to-cart1">Dodaj do Koszyka</button>
+            </div>
+        </div>
+
+        <!-- Drugi rodzaj ziemniaków -->
+        <div class="product">
+            <img src="thor230.jpg" alt="Genesis Thor230">
+            <div class="product-info">
+                <h2>Thor230</h2>
+                <p>Cena: 160</p>
+                <div class="quantity-input">
+                    <label for="quantity2">Ilość</label>
+                    <input type="number" id="quantity2" min="1" value="1">
+                </div>
+                <button class="button" id="add-to-cart2">Dodaj do Koszyka</button>
+            </div>
+        </div>
+
+        <!-- Drugi rodzaj ziemniaków -->
+        <div class="product">
+            <img src="rd630.jpg" alt="REDDRAGON 630">
+            <div class="product-info">
+                <h2>RedDragon 630</h2>
+                <p>Cena: 140</p>
+                <div class="quantity-input">
+                    <label for="quantity3">Ilość</label>
+                    <input type="number" id="quantity3" min="1" value="1">
+                </div>
+                <button class="button" id="add-to-cart3">Dodaj do Koszyka</button>
+            </div>
+        </div>
+
+    
+
+
+        <!-- Sekcja koszyka -->
+        <div class="cart" id="cart">
+            <h2>Koszyk</h2>
+            <p>Brak produktów w koszyku.</p>
+            <a href="platnosc.html" id="checkout-link" style="display:none;">Przejdź do Koszyka</a>
+        </div>
+    </div>
+
+    <script>
+        // Inicjalizacja koszyka
+        let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+        // Funkcja do aktualizacji widoku koszyka
+        function updateCartDisplay() {
+            const cart = document.getElementById('cart');
+            const checkoutLink = document.getElementById('checkout-link');
+            let cartHTML = '<h2>Koszyk</h2>';
+
+            if (cartItems.length === 0) {
+                cartHTML += '<p>Brak produktów w koszyku.</p>';
+                checkoutLink.style.display = 'none';
+            } else {
+                let totalAmount = 0;
+                cartItems.forEach(item => {
+                    cartHTML += `<p>${item.product}: ${item.quantity}</p>`;
+                    cartHTML += `<p>Łączna cena: ${item.totalPrice} PLN</p><hr>`;
+                    totalAmount += parseFloat(item.totalPrice);
+                });
+                cartHTML += `<p><strong>Suma do zapłaty: ${totalAmount.toFixed(2)} PLN</strong></p>`;
+                checkoutLink.style.display = 'inline-block';
+            }
+
+            cart.innerHTML = cartHTML;
+            cart.appendChild(checkoutLink); // Dodaj link do koszyka
+        }
+
+        // Wywołaj funkcję przy załadowaniu strony
+        updateCartDisplay();
+
+        // Dodawanie pierwszego do koszyka
+        document.getElementById('add-to-cart1').addEventListener('click', function() {
+            const pricePerKg1 = 200;
+            const quantity1 = parseInt(document.getElementById('quantity1').value);
+            if (isNaN(quantity1) || quantity1 < 1) {
+                alert('Proszę wprowadzić prawidłową ilość.');
+                return;
+            }
+            const totalPrice1 = (pricePerKg1 * quantity1).toFixed(2);
+
+            // Sprawdź, czy produkt już istnieje w koszyku
+            const existingItemIndex = cartItems.findIndex(item => item.product === "RK61 Keyboard");
+            if (existingItemIndex !== -1) {
+                // Aktualizuj istniejący produkt
+                cartItems[existingItemIndex].quantity += quantity1;
+                cartItems[existingItemIndex].totalPrice = (cartItems[existingItemIndex].quantity * pricePerKg1).toFixed(2);
+            } else {
+                // Dodaj nowy produkt do koszyka
+                cartItems.push({
+                    product: "RK 61",
+                    quantity: quantity1,
+                    totalPrice: totalPrice1
+                });
+            }
+
+            // Zapisz koszyk w localStorage
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+            // Aktualizuj widok koszyka
+            updateCartDisplay();
+        });
+
+        // Dodawanie drugiego rodzaju ziemniaków (ziemniaki słodkie) do koszyka
+        document.getElementById('add-to-cart2').addEventListener('click', function() {
+            const pricePerKg2 = 160;
+            const quantity2 = parseInt(document.getElementById('quantity2').value);
+            if (isNaN(quantity2) || quantity2 < 1) {
+                alert('Proszę wprowadzić prawidłową ilość.');
+                return;
+            }
+            const totalPrice2 = (pricePerKg2 * quantity2).toFixed(2);
+
+            // Sprawdź, czy produkt już istnieje w koszyku
+            const existingItemIndex = cartItems.findIndex(item => item.product === "Genesis Thor230");
+            if (existingItemIndex !== -1) {
+                // Aktualizuj istniejący produkt
+                cartItems[existingItemIndex].quantity += quantity2;
+                cartItems[existingItemIndex].totalPrice = (cartItems[existingItemIndex].quantity * pricePerKg2).toFixed(2);
+            } else {
+                // Dodaj nowy produkt do koszyka
+                cartItems.push({
+                    product: "Genesis Thor230",
+                    quantity: quantity2,
+                    totalPrice: totalPrice2
+                });
+            }
+
+            // Zapisz koszyk w localStorage
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+            // Aktualizuj widok koszyka
+            updateCartDisplay();
+        });
+
+
+        // Dodawanie drugiego rodzaju ziemniaków (ziemniaki słodkie) do koszyka
+        document.getElementById('add-to-cart3').addEventListener('click', function() {
+            const pricePerKg3 = 160;
+            const quantity3 = parseInt(document.getElementById('quantity3').value);
+            if (isNaN(quantity3) || quantity3 < 1) {
+                alert('Proszę wprowadzić prawidłową ilość.');
+                return;
+            }
+            const totalPrice3 = (pricePerKg3 * quantity3).toFixed(3);
+
+            // Sprawdź, czy produkt już istnieje w koszyku
+            const existingItemIndex = cartItems.findIndex(item => item.product === "RedDragon 630");
+            if (existingItemIndex !== -1) {
+                // Aktualizuj istniejący produkt
+                cartItems[existingItemIndex].quantity += quantity3;
+                cartItems[existingItemIndex].totalPrice = (cartItems[existingItemIndex].quantity * pricePerKg3).toFixed(3);
+            } else {
+                // Dodaj nowy produkt do koszyka
+                cartItems.push({
+                    product: "REDDRAGON 630",
+                    quantity: quantity3,
+                    totalPrice: totalPrice3
+                });
+            }
+
+            // Zapisz koszyk w localStorage
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+            // Aktualizuj widok koszyka
+            updateCartDisplay();
+        });
+
+ 
+
+    </script>
+   <footer>
+    
+    <center>  <p> © 2024 Sklep Online - Wszystkie prawa zastrzeżone</p> </center> 
+    </footer>  
+
+</body>
+</html>
